@@ -9,8 +9,12 @@
  * Implements hook_block_info().
  */
 function multipage_navigation_block_info() {
-  $blocks['multipage_navigation'] = array(
-    'info' => t('Multipage Navigation'),
+  $blocks['multipage_navigation_1'] = array(
+    'info' => t('Multipage Navigation 1'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+  );
+  $blocks['multipage_navigation_2'] = array(
+    'info' => t('Multipage Navigation 2'),
     'cache' => DRUPAL_CACHE_PER_PAGE,
   );
   return $blocks;
@@ -36,7 +40,8 @@ function multipage_navigation_wysiwyg_smart_paging_seo_form_alter(&$form) {
 function multipage_navigation_block_view($delta = '') {
   $block = array();
   switch ($delta) {
-    case 'multipage_navigation':
+    case 'multipage_navigation_1':
+    case 'multipage_navigation_2':
       if ($node = menu_get_object('node')) {
         $pagination = _multipage_navigation_get_pagination($node);
         if (sizeof($pagination->links) > 1) {

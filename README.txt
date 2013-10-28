@@ -2,7 +2,7 @@ Module: Multipage Navigation
 
 Description
 ===========
-Smart Paging sub-module that provides a block with links for multi-paged content.
+Smart Paging sub-module that provides blocks with links for multipaged content.
 Works with:
  Smart Paging
  Wysiwyg Smart Paging Seo

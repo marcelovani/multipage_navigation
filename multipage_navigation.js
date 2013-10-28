@@ -3,14 +3,15 @@
         attach: function (context, settings) {
             $(".block-multipage-navigation .pagination").click(function() {
                 var timesClicked = 0;
-                $(".block-multipage-navigation .pagination nav").toggle();
-                $(".block-multipage-navigation .pagination span.arrow").toggleClass("upsidedown");
+                $(this).find("nav").toggle();
+                $(this).find("span.arrow").toggleClass("upsidedown");
 
                 // Close the navigation when click outside.
                 var handler = function() {
                     timesClicked++;
                     if ( timesClicked > 1 ) {
-                        $(".block-multipage-navigation .pagination nav").hide();
+                        $(this).find("nav").hide();
+                        $(this).find("span.arrow").removeClass("upsidedown");
                         $("body").unbind("click.navigation");
                     }
                 };

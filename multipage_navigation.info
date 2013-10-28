@@ -3,4 +3,3 @@ description = Smart Paging sub-module that provides a block with links for multi
 package = User interface
 core = 7.x
 dependencies[] = smart_paging
-dependencies[] = wysiwyg_smart_paging_seo
