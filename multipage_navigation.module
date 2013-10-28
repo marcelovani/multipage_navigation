@@ -89,6 +89,11 @@ function multipage_navigation_theme($existing, $type, $theme, $path) {
  * Helper to extract Smart Paging data from multi-page content.
  */
 function _multipage_navigation_get_pagination($node) {
+  static $pagination;
+  if (sizeof($pagination) > 0) {
+    return $pagination;
+  }
+
   // Get content from the node.
   $body = field_get_items('node', $node, 'body'); //@todo should work with any field that uses smart_paging
   $content = $body[0]['value'];
@@ -119,11 +124,11 @@ function _multipage_navigation_get_pagination($node) {
     $json_values = json_decode($metatag);
     $navigation_title = $json_values->navigation_title;
 
+    $options = array();
     $options['query']['page'] = '0,'. $page; //@todo use the correct element
-    $options['attributes']['class'] = '';
     $current_page = _smart_paging_navigation_get_current_page(1); //@todo find the correct value of $element
-    if ($current_page == $page) {
-      $options['attributes']['class'] = 'active';
+    if ($current_page === $page) {
+      $options['attributes']['class'][$page] = 'active-page';
       // Store the value to be displayed as the block title.
       $pagination->default_title = $navigation_title;
     }
@@ -132,7 +137,6 @@ function _multipage_navigation_get_pagination($node) {
       $navigation_title = $node->title;
     }
     $pagination->links[] = l($page + 1 . '. ' . $navigation_title, _smart_paging_navigation_get_current_url(), $options);
-
   }
   return($pagination);
 }
@@ -154,5 +158,6 @@ function _smart_paging_navigation_get_current_url() {
  */
 function _smart_paging_navigation_get_current_page($element = 0) {
   global $pager_page_array;
-  return !empty($pager_page_array[$element] ) ? $pager_page_array[$element] : 0;
+  $page  = !empty($pager_page_array[$element] ) ? (int) $pager_page_array[$element] : 0;
+  return $page;
 }

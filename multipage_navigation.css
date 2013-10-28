@@ -119,7 +119,7 @@
     padding-left: 20px;
 }
 
-.block-multipage-navigation .pagination nav.dropdown ul li a.active {
+.block-multipage-navigation .pagination nav.dropdown ul li a.active-page {
     background-image: url("images/tick.png");
     background-repeat: no-repeat;
     background-position-x: 3px;
