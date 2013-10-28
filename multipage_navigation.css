@@ -13,7 +13,7 @@
     clear: both;
     position: relative;
     margin-top: 15px;
-    border: 1px solid #AAAAAA;
+    /*border: 1px solid #AAAAAA;*/
     padding: 0;
     cursor: pointer;
 
@@ -44,7 +44,7 @@
     text-decoration: none;
     font-size: 13px;
     font-weight: bold;
-    padding: 10px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
 }
 
 .block-multipage-navigation .pagination strong {
