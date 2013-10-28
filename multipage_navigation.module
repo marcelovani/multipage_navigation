@@ -123,6 +123,10 @@ function _multipage_navigation_get_pagination($node) {
     // Extract the Navigation title.
     $json_values = json_decode($metatag);
     $navigation_title = $json_values->navigation_title;
+    if (empty($navigation_title)) {
+      // Use the node title in case a page has empty value.
+      $navigation_title = $node->title;
+    }
 
     $options = array();
     $options['query']['page'] = '0,'. $page; //@todo use the correct element
@@ -131,10 +135,6 @@ function _multipage_navigation_get_pagination($node) {
       $options['attributes']['class'][$page] = 'active-page';
       // Store the value to be displayed as the block title.
       $pagination->default_title = $navigation_title;
-    }
-    if (empty($navigation_title)) {
-      // Use the node title in case a page has empty value for title.
-      $navigation_title = $node->title;
     }
     $pagination->links[] = l($page + 1 . '. ' . $navigation_title, _smart_paging_navigation_get_current_url(), $options);
   }
