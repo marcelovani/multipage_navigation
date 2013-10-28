@@ -1,0 +1,153 @@
+<?php
+
+/**
+ * @file
+ * Multipage Navigation.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function multipage_navigation_block_info() {
+  $blocks['multipage_navigation'] = array(
+    'info' => t('Multipage Navigation'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_wysiwyg_smart_paging_seo_form_alter().
+ */
+function multipage_navigation_wysiwyg_smart_paging_seo_form_alter(&$form) {
+  $form['navigation_title'] = array(
+    '#type' => 'textfield',
+    '#name' => 'navigation_title',
+    '#title' => 'Navigation Block Title',
+    '#size' => 100,
+    '#weight' => 99,
+    '#description' => t('The title that will appear on the Navigation Block for multi-paged content.'),
+  );
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function multipage_navigation_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'multipage_navigation':
+      if ($node = menu_get_object('node')) {
+        $pagination = _multipage_navigation_get_pagination($node);
+        if (sizeof($pagination->links) > 1) {
+          $block['title'] = '';
+          $block['content']['#markup'] = theme('multipage_navigation', array(
+              'title' => $pagination->default_title,
+              'links' => $pagination->links,
+              'page_of_total' => t('Page @current of @total', array(
+                  '@current' => _smart_paging_navigation_get_current_page(1) + 1,
+                  '@total' => sizeof($pagination->links),
+                )
+              )
+            )
+          );
+
+          // Attach JS and CSS to block.
+          $block['content']['#attached'] = array(
+            'css' => array(drupal_get_path('module', 'multipage_navigation') . '/multipage_navigation.css'),
+            'js' => array(drupal_get_path('module', 'multipage_navigation') . '/multipage_navigation.js'),
+          );
+        }
+      }
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_theme
+ */
+function multipage_navigation_theme($existing, $type, $theme, $path) {
+  return array(
+    'multipage_navigation' => array(
+      'template' => 'templates/block--multipage-navigation',
+      'variables' => array(
+        'title' => NUlL,
+        'links' => NULL,
+        'page_of_total' => NULL,
+      ),
+    ),
+  );
+}
+
+/*
+ * Helper to extract Smart Paging data from multi-page content.
+ */
+function _multipage_navigation_get_pagination($node) {
+  // Get content from the node.
+  $body = field_get_items('node', $node, 'body'); //@todo should work with any field that uses smart_paging
+  $content = $body[0]['value'];
+
+  // Find all smartpagingurl tags.
+  $fragment_urls = array();
+  preg_match_all('<!--smartpagingurl "(.*)"-->', $content, $matched_tags);  //$todo improve regex
+  if (!empty($matched_tags[1])) {
+    $fragment_urls = $matched_tags[1];
+  }
+
+  // Find all smartpagingmeta tags.
+  $metatags = array();
+  preg_match_all('<!--smartpagingmeta ({.*?})-->', $content, $matched_tags); //$todo improve regex
+  if (!empty($matched_tags[1])) {
+    $metatags = $matched_tags[1];
+  }
+
+  // Use the node title for the first item of the navigation.
+  $metatags = array_merge(array(json_encode(array('navigation_title' => $node->title))), $metatags);
+
+  // Create pagination.
+  $pagination = new stdClass();
+  $pagination->links = array();
+
+  foreach ($metatags as $page => $metatag) {
+    // Extract the Navigation title.
+    $json_values = json_decode($metatag);
+    $navigation_title = $json_values->navigation_title;
+
+    $options['query']['page'] = '0,'. $page; //@todo use the correct element
+    $options['attributes']['class'] = '';
+    $current_page = _smart_paging_navigation_get_current_page(1); //@todo find the correct value of $element
+    if ($current_page == $page) {
+      $options['attributes']['class'] = 'active';
+      // Store the value to be displayed as the block title.
+      $pagination->default_title = $navigation_title;
+    }
+    if (empty($navigation_title)) {
+      // Use the node title in case a page has empty value for title.
+      $navigation_title = $node->title;
+    }
+    $pagination->links[] = l($page + 1 . '. ' . $navigation_title, _smart_paging_navigation_get_current_url(), $options);
+
+  }
+  return($pagination);
+}
+
+/**
+ * Helper that returns the current Url.
+ */
+function _smart_paging_navigation_get_current_url() {
+  global $base_url;
+  $current_url = function_exists("path_alias_xt_get_path_alias") ? path_alias_xt_get_path_alias($_GET['q']) : drupal_get_path_alias($_GET['q']);
+  $current_url = preg_replace('#(^/)|(/$)#', '', $current_url);
+  $clean_url   = variable_get('clean_url', 0);
+  $current_url = $clean_url ? $current_url : "?q=$current_url";
+  return $current_url;
+}
+
+/**
+ * Helper that returns the current page.
+ */
+function _smart_paging_navigation_get_current_page($element = 0) {
+  global $pager_page_array;
+  return !empty($pager_page_array[$element] ) ? $pager_page_array[$element] : 0;
+}
