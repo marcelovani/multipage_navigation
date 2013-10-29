@@ -50,7 +50,7 @@ function multipage_navigation_block_view($delta = '') {
               'title' => $pagination->default_title,
               'links' => $pagination->links,
               'page_of_total' => t('Page @current of @total', array(
-                  '@current' => _smart_paging_navigation_get_current_page(1) + 1,
+                  '@current' => _multipage_navigation_get_current_page(1) + 1,
                   '@total' => sizeof($pagination->links),
                 )
               )
@@ -102,7 +102,7 @@ function _multipage_navigation_get_pagination($node) {
   $fragment_urls = array();
   preg_match_all('<!--smartpagingurl "(.*)"-->', $content, $matched_tags);  //$todo improve regex
   if (!empty($matched_tags[1])) {
-    $fragment_urls = $matched_tags[1];
+    $fragment_urls = array_merge(array(''), $matched_tags[1]);
   }
 
   // Find all smartpagingmeta tags.
@@ -132,13 +132,19 @@ function _multipage_navigation_get_pagination($node) {
 
     $options = array();
     $options['query']['page'] = '0,'. $page; //@todo use the correct element
-    $current_page = _smart_paging_navigation_get_current_page(1); //@todo find the correct value of $element
+
+    // Add fragment Url.
+    if (!empty($fragment_urls[$page])) {
+      $options['fragment'] = $fragment_urls[$page];
+    }
+
+    $current_page = _multipage_navigation_get_current_page(1); //@todo find the correct value of $element
     if ($current_page === $page) {
       $options['attributes']['class'][$page] = 'active-page';
       // Store the value to be displayed as the block title.
       $pagination->default_title = $navigation_title;
     }
-    $pagination->links[] = l($page + 1 . '. ' . $navigation_title, _smart_paging_navigation_get_current_url(), $options);
+    $pagination->links[] = l($page + 1 . '. ' . $navigation_title, _multipage_navigation_get_current_url(), $options);
   }
   return($pagination);
 }
@@ -146,7 +152,7 @@ function _multipage_navigation_get_pagination($node) {
 /**
  * Helper that returns the current Url.
  */
-function _smart_paging_navigation_get_current_url() {
+function _multipage_navigation_get_current_url() {
   global $base_url;
   $current_url = function_exists("path_alias_xt_get_path_alias") ? path_alias_xt_get_path_alias($_GET['q']) : drupal_get_path_alias($_GET['q']);
   $current_url = preg_replace('#(^/)|(/$)#', '', $current_url);
@@ -158,7 +164,7 @@ function _smart_paging_navigation_get_current_url() {
 /**
  * Helper that returns the current page.
  */
-function _smart_paging_navigation_get_current_page($element = 0) {
+function _multipage_navigation_get_current_page($element = 0) {
   global $pager_page_array;
   $page  = !empty($pager_page_array[$element] ) ? (int) $pager_page_array[$element] : 0;
   return $page;
