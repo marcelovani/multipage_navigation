@@ -55,7 +55,7 @@
           <li class="">
             <?php print $link; ?>
           </li>
-        <? endforeach ?>
+        <?php endforeach ?>
       </ul>
     </nav>
   </div>

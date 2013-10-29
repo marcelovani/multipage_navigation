@@ -27,7 +27,7 @@
 }
 
 .block-multipage-navigation .pagination:hover {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 
 .block-multipage-navigation .pagination nav.dropdown ul li a,
@@ -92,7 +92,8 @@
   padding: 0;
 }
 
-.block-multipage-navigation nav ul, nav ol {
+.block-multipage-navigation nav ul,
+nav ol {
   list-style: none;
   list-style-image: none;
   margin: 0;

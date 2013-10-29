@@ -44,16 +44,16 @@ function multipage_navigation_block_view($delta = '') {
     case 'multipage_navigation_2':
       if ($node = menu_get_object('node')) {
         $pagination = _multipage_navigation_get_pagination($node);
-        if (sizeof($pagination->links) > 1) {
+        if (count($pagination->links) > 1) {
           $block['title'] = '';
           $block['content']['#markup'] = theme('multipage_navigation', array(
               'title' => $pagination->default_title,
               'links' => $pagination->links,
               'page_of_total' => t('Page @current of @total', array(
                   '@current' => _multipage_navigation_get_current_page(1) + 1,
-                  '@total' => sizeof($pagination->links),
+                  '@total' => count($pagination->links),
                 )
-              )
+              ),
             )
           );
 
@@ -70,14 +70,14 @@ function multipage_navigation_block_view($delta = '') {
 }
 
 /**
- * Implements hook_theme
+ * Implements hook_theme().
  */
 function multipage_navigation_theme($existing, $type, $theme, $path) {
   return array(
     'multipage_navigation' => array(
       'template' => 'templates/block--multipage-navigation',
       'variables' => array(
-        'title' => NUlL,
+        'title' => NULL,
         'links' => NULL,
         'page_of_total' => NULL,
       ),
@@ -85,29 +85,29 @@ function multipage_navigation_theme($existing, $type, $theme, $path) {
   );
 }
 
-/*
+/**
  * Helper to extract Smart Paging data from multi-page content.
  */
 function _multipage_navigation_get_pagination($node) {
   static $pagination;
-  if (sizeof($pagination) > 0) {
+  if (count($pagination) > 0) {
     return $pagination;
   }
 
   // Get content from the node.
-  $body = field_get_items('node', $node, 'body'); //@todo should work with any field that uses smart_paging
+  $body = field_get_items('node', $node, 'body'); // @TODO should work with any field that uses smart_paging.
   $content = $body[0]['value'];
 
   // Find all smartpagingurl tags.
   $fragment_urls = array();
-  preg_match_all('<!--smartpagingurl "(.*)"-->', $content, $matched_tags);  //$todo improve regex
+  preg_match_all('<!--smartpagingurl "(.*)"-->', $content, $matched_tags);  // @TODO improve regex.
   if (!empty($matched_tags[1])) {
     $fragment_urls = array_merge(array(''), $matched_tags[1]);
   }
 
   // Find all smartpagingmeta tags.
   $metatags = array();
-  preg_match_all('<!--smartpagingmeta ({.*?})-->', $content, $matched_tags); //$todo improve regex
+  preg_match_all('<!--smartpagingmeta ({.*?})-->', $content, $matched_tags); // @TODO improve regex.
   if (!empty($matched_tags[1])) {
     $metatags = $matched_tags[1];
   }
@@ -131,14 +131,14 @@ function _multipage_navigation_get_pagination($node) {
     }
 
     $options = array();
-    $options['query']['page'] = '0,'. $page; //@todo use the correct element
+    $options['query']['page'] = '0,' . $page; // @TODO use the correct element.
 
     // Add fragment Url.
     if (!empty($fragment_urls[$page])) {
       $options['fragment'] = $fragment_urls[$page];
     }
 
-    $current_page = _multipage_navigation_get_current_page(1); //@todo find the correct value of $element
+    $current_page = _multipage_navigation_get_current_page(1); // @TODO find the correct value of $element.
     if ($current_page === $page) {
       $options['attributes']['class'][$page] = 'active-page';
       // Store the value to be displayed as the block title.
@@ -146,7 +146,7 @@ function _multipage_navigation_get_pagination($node) {
     }
     $pagination->links[] = l($page + 1 . '. ' . $navigation_title, _multipage_navigation_get_current_url(), $options);
   }
-  return($pagination);
+  return $pagination;
 }
 
 /**
@@ -165,6 +165,6 @@ function _multipage_navigation_get_current_url() {
  */
 function _multipage_navigation_get_current_page($element = 0) {
   global $pager_page_array;
-  $page  = !empty($pager_page_array[$element] ) ? (int) $pager_page_array[$element] : 0;
+  $page  = !empty($pager_page_array[$element]) ? (int) $pager_page_array[$element] : 0;
   return $page;
 }
