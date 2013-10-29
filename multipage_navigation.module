@@ -153,7 +153,6 @@ function _multipage_navigation_get_pagination($node) {
  * Helper that returns the current Url.
  */
 function _multipage_navigation_get_current_url() {
-  global $base_url;
   $current_url = function_exists("path_alias_xt_get_path_alias") ? path_alias_xt_get_path_alias($_GET['q']) : drupal_get_path_alias($_GET['q']);
   $current_url = preg_replace('#(^/)|(/$)#', '', $current_url);
   $clean_url   = variable_get('clean_url', 0);

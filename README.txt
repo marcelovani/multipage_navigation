@@ -18,5 +18,3 @@ Configuration
 Documentation
 =============
 See https://drupal.org/node/
-
-
