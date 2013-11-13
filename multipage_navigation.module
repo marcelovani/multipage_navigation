@@ -5,6 +5,35 @@
  * Multipage Navigation.
  */
 
+/*
+ * Implements hook_menu().
+ */
+function multipage_navigation_menu() {
+  $items['admin/config/user-interface/multipage-navigation'] = array(
+    'title' => 'Multipage Navigation',
+    'description' => 'Configuration for Multipage Navigation',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('multipage_navigation_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/*
+ * Admin form.
+ */
+function multipage_navigation_admin_settings() {
+  $form = array();
+  $form['multipage_navigation_pagination_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Pagination text'),
+    '#description' => t('Current and total pages text. You can use the following placeholders: @current, @total'),
+    '#default_value' => variable_get('multipage_navigation_pagination_text', 'Page @current of @total')
+  );
+  return system_settings_form($form);
+}
+
 /**
  * Implements hook_block_info().
  */
@@ -49,7 +78,7 @@ function multipage_navigation_block_view($delta = '') {
           $block['content']['#markup'] = theme('multipage_navigation', array(
               'title' => $pagination->default_title,
               'links' => $pagination->links,
-              'page_of_total' => t('Page @current of @total', array(
+              'page_of_total' => t(variable_get('multipage_navigation_pagination_text', 'Page @current of @total'), array(
                   '@current' => _multipage_navigation_get_current_page(1) + 1,
                   '@total' => count($pagination->links),
                 )
