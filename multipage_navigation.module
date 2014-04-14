@@ -73,13 +73,24 @@ function multipage_navigation_block_view($delta = '') {
     case 'multipage_navigation_2':
       if ($node = menu_get_object('node')) {
         $pagination = _multipage_navigation_get_pagination($node);
+        $links = array();
+        foreach($pagination->links as $page_no => $link) {
+          $link['page_no'] = $page_no + 1;
+          if ($link['active']) {
+            $link['options']['attributes']['class'][] = 'active-page';
+            $current_page_number = $link['page_no'];
+            $pagination->default_title = $link['text'];
+          }
+          $links[$page_no] = theme_multipage_navigation_link($link);
+        }
+
         if (count($pagination->links) > 1) {
           $block['title'] = '';
           $block['content']['#markup'] = theme('multipage_navigation', array(
               'title' => $pagination->default_title,
-              'links' => $pagination->links,
+              'links' => $links,
               'page_of_total' => t(variable_get('multipage_navigation_pagination_text', 'Page @current of @total'), array(
-                  '@current' => _multipage_navigation_get_current_page(1) + 1,
+                  '@current' => $current_page_number,
                   '@total' => count($pagination->links),
                 )
               ),
@@ -111,8 +122,22 @@ function multipage_navigation_theme($existing, $type, $theme, $path) {
         'page_of_total' => NULL,
       ),
     ),
+    'multipage_navigation_link' => array(
+      'variables' => array(
+        'path' => NULL,
+        'text' => NULL,
+        'page_no' => NULL,
+        'options' => NULL,
+      ),
+    ),
   );
 }
+
+function theme_multipage_navigation_link($variables) {
+  $link = l($variables['page_no'] . '. ' . $variables['text'], $variables['path'], $variables['options']);
+  return $link;
+}
+
 
 /**
  * Helper to extract Smart Paging data from multi-page content.
@@ -168,13 +193,13 @@ function _multipage_navigation_get_pagination($node) {
     }
 
     $current_page = _multipage_navigation_get_current_page(1); // @TODO find the correct value of $element.
-    if ($current_page === $page) {
-      $options['attributes']['class'][$page] = 'active-page';
-      // Store the value to be displayed as the block title.
-      $pagination->default_title = $navigation_title;
-    }
-    $pagination->links[] = l($page + 1 . '. ' . $navigation_title, _multipage_navigation_get_current_url(), $options);
+    $active = ($current_page === $page) ? TRUE : FALSE;
+
+    $pagination->links[] = array('path' => 'node/' . $node->nid, 'text' => $navigation_title, 'options' => $options, 'active' => $active);
   }
+
+  drupal_alter('multipage_navigation', $pagination);
+
   return $pagination;
 }
 
