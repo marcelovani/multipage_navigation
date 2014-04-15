@@ -73,21 +73,26 @@ function multipage_navigation_block_view($delta = '') {
     case 'multipage_navigation_2':
       if ($node = menu_get_object('node')) {
         $pagination = _multipage_navigation_get_pagination($node);
+        // Order pages by weight (key)
+        ksort($pagination->links);
+        $page_number = 1;
         $links = array();
-        foreach($pagination->links as $page_no => $link) {
-          $link['page_no'] = $page_no + 1;
-          if ($link['active']) {
+
+        foreach ($pagination->links as $link) {
+          $link['page_no'] = $page_number;
+          if (isset($link['active']) && $link['active'] === TRUE) {
             $link['options']['attributes']['class'][] = 'active-page';
-            $current_page_number = $link['page_no'];
-            $pagination->default_title = $link['text'];
+            $current_page_number = $page_number;
+            $default_title = $link['text'];
           }
-          $links[$page_no] = theme_multipage_navigation_link($link);
+          $links[] = theme_multipage_navigation_link($link);
+          $page_number++;
         }
 
         if (count($pagination->links) > 1) {
           $block['title'] = '';
           $block['content']['#markup'] = theme('multipage_navigation', array(
-              'title' => $pagination->default_title,
+              'title' => $default_title,
               'links' => $links,
               'page_of_total' => t(variable_get('multipage_navigation_pagination_text', 'Page @current of @total'), array(
                   '@current' => $current_page_number,
