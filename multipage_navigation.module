@@ -114,7 +114,7 @@ function _multipage_navigation_get_pagination($node) {
   $content = $body[0]['value'];
 
   // Find all pagebreaks.
-  $page_breaks = array();
+  $total_pages = 0;
   $page_break_comment = variable_get('smart_paging_pagebreak', '<!--pagebreak-->');
   preg_match_all('~' . $page_break_comment . '~', $content, $matched_tags);
   if (!empty($matched_tags[0])) {
