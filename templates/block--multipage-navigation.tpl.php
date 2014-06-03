@@ -46,7 +46,7 @@
 ?>
 
 <section class="pagination">
-  <div id="<?php print $block_html_id; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
+  <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <h2<?php print $title_attributes; ?>><strong><?php print $page_of_total; ?></strong><?php print $title; ?></h2>
     <span class="arrow"></span>
     <nav class="dropdown">

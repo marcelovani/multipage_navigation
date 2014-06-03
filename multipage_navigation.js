@@ -1,7 +1,7 @@
 (function ($) {
-    Drupal.behaviors.multipage_navigation_block = {
+    Drupal.behaviors.multipage_navigation = {
         attach: function (context, settings) {
-            $(".block-multipage-navigation .pagination").click(function() {
+            $("div .multipage-navigation .pagination").click(function() {
                 var timesClicked = 0;
                 element = $(this);
                 element.find("nav").toggle();
