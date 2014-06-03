@@ -73,20 +73,9 @@ function multipage_navigation_block_view($delta = '') {
     case 'multipage_navigation_2':
       if ($node = menu_get_object('node')) {
         $pagination = _multipage_navigation_get_pagination($node);
-        // Order pages by weight (key)
-        ksort($pagination->links);
-        $page_number = 1;
-        $links = array();
-
         if (count($pagination->links) > 1) {
           $block['title'] = '';
           $block['content']['#markup'] = _multipage_navigation_get_content($pagination);
-
-          // Attach JS and CSS to block.
-          $block['content']['#attached'] = array(
-            'css' => array(drupal_get_path('module', 'multipage_navigation') . '/multipage_navigation.css'),
-            'js' => array(drupal_get_path('module', 'multipage_navigation') . '/multipage_navigation.js'),
-          );
         }
       }
       break;
@@ -245,6 +234,14 @@ function _multipage_navigation_get_content($pagination) {
       ),
     )
   );
+}
+
+/**
+ * Implements hook_page_alter()
+ */
+function multipage_navigation_page_alter(&$page) {
+  drupal_add_css(drupal_get_path('module', 'multipage_navigation') . '/multipage_navigation.css');
+  drupal_add_js(drupal_get_path('module', 'multipage_navigation') . '/multipage_navigation.js');
 }
 
 /**
