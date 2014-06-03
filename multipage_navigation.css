@@ -1,4 +1,4 @@
-.upsidedown {
+.mn_upsidedown {
   -webkit-transform: rotate(180deg); /* Chrome and other webkit browsers */
   -moz-transform: rotate(180deg); /* FF */
   -o-transform: rotate(180deg); /* Opera */
@@ -9,36 +9,45 @@
   filter: progid:DXImageTransform.Microsoft.Matrix(M11=-1, M12=0, M21=0, M22=-1, DX=0, DY=0, SizingMethod='auto expand');
 }
 
-div .multipage-navigation .pagination {
+.pagination .multipage-navigation {
   clear: both;
   position: relative;
   margin-top: 15px;
   /*border: 1px solid #AAAAAA;*/
   padding: 0;
   cursor: pointer;
-
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxsaW5lYXJHcmFkaWVudCBpZD0iZzEiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwLjAxIiBzdG9wLWNvbG9yPSJyZ2JhKDEzMywgMTMzLCAxMzEsIDAuMDUxKSIvPjxzdG9wIG9mZnNldD0iMC43MyIgc3RvcC1jb2xvcj0icmdiYSgwLCAwLCAwLCAwLjMyMSkiLz48L2xpbmVhckdyYWRpZW50PjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZzEpIiAvPjwvc3ZnPg==);
-  background-image: -webkit-gradient(linear, center top, center bottom, color-stop(1%, rgba(133, 133, 131, 0.051)), color-stop(73%, rgba(0, 0, 0, 0.321)));
-  background-image: -webkit-linear-gradient(top, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
-  background-image: -moz-linear-gradient(top, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
-  background-image: -ms-linear-gradient(top, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
-  background-image: -o-linear-gradient(top, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
-  background-image: linear-gradient(to bottom, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
 }
 
-div .multipage-navigation .pagination:hover {
+.mn_background {
+    clear: both;
+    position: relative;
+    margin-top: 15px;
+    /*border: 1px solid #AAAAAA;*/
+    padding: 0;
+    cursor: pointer;
+
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxsaW5lYXJHcmFkaWVudCBpZD0iZzEiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwLjAxIiBzdG9wLWNvbG9yPSJyZ2JhKDEzMywgMTMzLCAxMzEsIDAuMDUxKSIvPjxzdG9wIG9mZnNldD0iMC43MyIgc3RvcC1jb2xvcj0icmdiYSgwLCAwLCAwLCAwLjMyMSkiLz48L2xpbmVhckdyYWRpZW50PjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZzEpIiAvPjwvc3ZnPg==);
+    background-image: -webkit-gradient(linear, center top, center bottom, color-stop(1%, rgba(133, 133, 131, 0.051)), color-stop(73%, rgba(0, 0, 0, 0.321)));
+    background-image: -webkit-linear-gradient(top, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
+    background-image: -moz-linear-gradient(top, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
+    background-image: -ms-linear-gradient(top, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
+    background-image: -o-linear-gradient(top, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
+    background-image: linear-gradient(to bottom, rgba(133, 133, 131, 0.051) 1%, rgba(0, 0, 0, 0.321) 73%);
+}
+
+.pagination .multipage-navigation:hover {
   background-color: #f2f2f2;
 }
 
-div .multipage-navigation .pagination nav.dropdown ul li a,
-div .multipage-navigation .pagination nav.dropdown ul li div {
+.pagination .multipage-navigation nav.mn_dropdown ul li a,
+.pagination .multipage-navigation nav.mn_dropdown ul li div {
   display: block;
   padding: 10px 10px 10px 5px;
   text-align: left;
   cursor: pointer;
 }
 
-div .multipage-navigation .pagination h2 {
+.pagination .multipage-navigation h2 {
   text-transform: uppercase;
   padding: 0;
   text-decoration: none;
@@ -47,7 +56,7 @@ div .multipage-navigation .pagination h2 {
   padding: 5px 5px 5px 5px;
 }
 
-div .multipage-navigation .pagination strong {
+.pagination .multipage-navigation strong {
   color: #475795;
   text-transform: uppercase;
   padding: 0;
@@ -56,8 +65,8 @@ div .multipage-navigation .pagination strong {
   padding-right: 5px;
 }
 
-div .multipage-navigation .pagination span.arrow,
-div .multipage-navigation .pagination nav.dropdown li span.arrow {
+.pagination .multipage-navigation span.arrow,
+.pagination .multipage-navigation nav.mn_dropdown li span.arrow {
   background-image: url("images/arrow.png");
   background-position-x: 7px;
   background-repeat: no-repeat;
@@ -75,7 +84,7 @@ div .multipage-navigation .pagination nav.dropdown li span.arrow {
   z-index: 500;
 }
 
-div .multipage-navigation .pagination nav.dropdown {
+.pagination .multipage-navigation nav.mn_dropdown {
   clear: both;
   position: relative;
   border: 1px solid #b2b2b2;
@@ -86,22 +95,22 @@ div .multipage-navigation .pagination nav.dropdown {
   width: 100%;
 }
 
-div .multipage-navigation .pagination ul {
+.pagination .multipage-navigation ul {
   clear: both;
   margin: 0;
   padding: 0;
 }
 
-div .multipage-navigation nav ul,
-nav ol {
+.pagination .multipage-navigation nav ul,
+.pagination .multipage-navigation nav ol {
   list-style: none;
   list-style-image: none;
   margin: 0;
   padding: 0;
 }
 
-div .multipage-navigation .pagination nav.dropdown ul li a,
-div .multipage-navigation .pagination nav.dropdown ul li div {
+.pagination .multipage-navigation nav.mn_dropdown ul li a,
+.pagination .multipage-navigation nav.mn_dropdown ul li div {
   background-color: white;
   position: relative;
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
@@ -111,16 +120,16 @@ div .multipage-navigation .pagination nav.dropdown ul li div {
   padding-left: 10px;
 }
 
-div .multipage-navigation .pagination nav.dropdown ul li:hover,
-div .multipage-navigation .pagination nav.dropdown ul li a:hover {
+.pagination .multipage-navigation nav.mn_dropdown ul li:hover,
+.pagination .multipage-navigation nav.mn_dropdown ul li a:hover {
   background-color: rgba(255, 228, 181, 0.99);
 }
 
-div .multipage-navigation .pagination nav.dropdown ul li a {
+.pagination .multipage-navigation nav.mn_dropdown ul li a {
   padding-left: 20px;
 }
 
-div .multipage-navigation .pagination nav.dropdown ul li a.active-page {
+.pagination .multipage-navigation nav.mn_dropdown ul li a.active-page {
   background-image: url("images/tick.png");
   background-repeat: no-repeat;
   background-position-x: 3px;

@@ -243,6 +243,7 @@ function multipage_navigation_field_extra_fields() {
         'label' => t('Multipage Navigation ' . $i),
         'description' => t('Displays the Multipage Navigation.'),
         'weight' => 10,
+        'visible' => FALSE,
       );
     }
   }

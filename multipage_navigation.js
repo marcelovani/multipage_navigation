@@ -1,18 +1,18 @@
 (function ($) {
     Drupal.behaviors.multipage_navigation = {
         attach: function (context, settings) {
-            $("div .multipage-navigation .pagination").click(function() {
+            $(".pagination .multipage-navigation").click(function() {
                 var timesClicked = 0;
                 element = $(this);
                 element.find("nav").toggle();
-                element.find("span.arrow").toggleClass("upsidedown");
+                element.find("span.arrow").toggleClass("mn_upsidedown");
 
                 // Close the navigation when click outside.
                 var handler = function() {
                     timesClicked++;
                     if (timesClicked > 1) {
                         element.find("nav").hide();
-                        element.find("span.arrow").removeClass("upsidedown");
+                        element.find("span.arrow").removeClass("mn_upsidedown");
                         $("body").unbind("click.navigation");
                     }
                 };
