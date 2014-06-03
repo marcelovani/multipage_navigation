@@ -227,3 +227,12 @@ function _multipage_navigation_get_current_page($element = 0) {
   $page  = !empty($pager_page_array[$element]) ? (int) $pager_page_array[$element] : 0;
   return $page;
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function multipage_navigation_uninstall() {
+  variable_del('multipage_navigation_pagination_text');
+  variable_del('multipage_navigation_content_types');
+}
+
