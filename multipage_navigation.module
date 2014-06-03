@@ -78,17 +78,6 @@ function multipage_navigation_block_view($delta = '') {
         $page_number = 1;
         $links = array();
 
-        foreach ($pagination->links as $link) {
-          $link['page_no'] = $page_number;
-          if (isset($link['active']) && $link['active'] === TRUE) {
-            $link['options']['attributes']['class'][] = 'active-page';
-            $current_page_number = $page_number;
-            $default_title = $link['text'];
-          }
-          $links[] = theme_multipage_navigation_link($link);
-          $page_number++;
-        }
-
         if (count($pagination->links) > 1) {
           $block['title'] = '';
           $block['content']['#markup'] = theme('multipage_navigation', array(
@@ -159,7 +148,7 @@ function _multipage_navigation_get_pagination($node) {
 
   // Find all smartpagingurl tags.
   $fragment_urls = array();
-  preg_match_all('<!--smartpagingurl "(.*)"-->', $content, $matched_tags);  // @TODO improve regex.
+  preg_match_all('<!--smartpagingurl "(.*)"-->', $content, $matched_tags); // @TODO improve regex.
   if (!empty($matched_tags[1])) {
     $fragment_urls = array_merge(array(''), $matched_tags[1]);
   }
@@ -200,10 +189,33 @@ function _multipage_navigation_get_pagination($node) {
     $current_page = _multipage_navigation_get_current_page(1); // @TODO find the correct value of $element.
     $active = ($current_page === $page) ? TRUE : FALSE;
 
-    $pagination->links[] = array('path' => 'node/' . $node->nid, 'text' => $navigation_title, 'options' => $options, 'active' => $active);
+    $pagination->links[] = array(
+      'path' => 'node/' . $node->nid,
+      'text' => $navigation_title,
+      'options' => $options,
+      'active' => $active
+    );
   }
 
+  // Allow other modules to change the pagination.
   drupal_alter('multipage_navigation', $pagination);
+
+  // Order pages by weight (key)
+  ksort($pagination->links);
+  $page_number = 1;
+  $links = array();
+
+  foreach ($pagination->links as $link) {
+    $link['page_no'] = $page_number;
+    if (isset($link['active']) && $link['active'] === TRUE) {
+      $link['options']['attributes']['class'][] = 'active-page';
+      $pagination->current_page_number = $page_number;
+      $pagination->default_title = $link['text'];
+    }
+    $links[] = theme_multipage_navigation_link($link);
+    $page_number++;
+  }
+  $pagination->links = $links;
 
   return $pagination;
 }
