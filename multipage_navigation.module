@@ -16,6 +16,7 @@ function multipage_navigation_menu() {
     'page arguments' => array('multipage_navigation_admin_settings'),
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
+    'file' => 'multipage_navigation.admin.inc',
   );
   return $items;
 }
