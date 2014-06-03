@@ -80,16 +80,7 @@ function multipage_navigation_block_view($delta = '') {
 
         if (count($pagination->links) > 1) {
           $block['title'] = '';
-          $block['content']['#markup'] = theme('multipage_navigation', array(
-              'title' => $default_title,
-              'links' => $links,
-              'page_of_total' => t(variable_get('multipage_navigation_pagination_text', 'Page @current of @total'), array(
-                  '@current' => $current_page_number,
-                  '@total' => count($pagination->links),
-                )
-              ),
-            )
-          );
+          $block['content']['#markup'] = _multipage_navigation_get_content($pagination);
 
           // Attach JS and CSS to block.
           $block['content']['#attached'] = array(
@@ -238,6 +229,22 @@ function _multipage_navigation_get_current_page($element = 0) {
   global $pager_page_array;
   $page  = !empty($pager_page_array[$element]) ? (int) $pager_page_array[$element] : 0;
   return $page;
+}
+
+/**
+ * Helper to get the content for the dropdown.
+ */
+function _multipage_navigation_get_content($pagination) {
+  return theme('multipage_navigation', array(
+      'title' => $pagination->default_title,
+      'links' => $pagination->links,
+      'page_of_total' => t(variable_get('multipage_navigation_pagination_text', 'Page @current of @total'), array(
+          '@current' => $pagination->current_page_number,
+          '@total' => count($pagination->links),
+        )
+      ),
+    )
+  );
 }
 
 /**
