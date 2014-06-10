@@ -142,7 +142,7 @@ function _multipage_navigation_get_pagination($node) {
   $pagination = new stdClass();
   $pagination->links = array();
 
-  for ($page = 0; $page < $total_pages; $page++) {
+  for ($page = 0; $page <= $total_pages; $page++) {
 
     // Use the node title in case a page has empty value.
     $navigation_title = $node->title;
