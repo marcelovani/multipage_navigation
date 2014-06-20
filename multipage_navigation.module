@@ -59,7 +59,7 @@ function multipage_navigation_block_view($delta = '') {
     case 'multipage_navigation_1':
     case 'multipage_navigation_2':
       if ($node = menu_get_object('node')) {
-        $pagination = _multipage_navigation_get_pagination($node);
+        $pagination = multipage_navigation_get_pagination($node);
         if (count($pagination->links) > 1) {
           $block['title'] = '';
           $block['content']['#markup'] = _multipage_navigation_get_content($pagination);
@@ -103,7 +103,7 @@ function theme_multipage_navigation_link($variables) {
 /**
  * Helper to extract Smart Paging data from multi-page content.
  */
-function _multipage_navigation_get_pagination($node) {
+function multipage_navigation_get_pagination($node) {
   static $pagination;
   if (count($pagination) > 0) {
     return $pagination;
@@ -274,7 +274,7 @@ function multipage_navigation_node_view($node, $view_mode, $langcode) {
       continue;
     }
     if ($field_name == 'multipage_navigation_1' || $field_name == 'multipage_navigation_2') {
-      $pagination = _multipage_navigation_get_pagination($node);
+      $pagination = multipage_navigation_get_pagination($node);
       if (count($pagination->links) > 1) {
         $node->content[$field_name]['#markup'] = _multipage_navigation_get_content($pagination);
       }
