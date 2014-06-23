@@ -52,7 +52,7 @@
     <nav class="mn_dropdown">
       <ul>
         <?php foreach($links as $page => $link): ?>
-          <li class="">
+          <li class="link">
             <?php print $link; ?>
           </li>
         <?php endforeach ?>
