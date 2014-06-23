@@ -98,11 +98,16 @@ function multipage_navigation_theme($existing, $type, $theme, $path) {
   );
 }
 
+/**
+ * Implements hook_theme().
+ */
 function theme_multipage_navigation_link($variables) {
-  $link = l($variables['page_no'] . '. ' . $variables['text'], $variables['path'], $variables['options']);
+  $variables['options']['html'] = TRUE;
+  $text = '<span class="mn_page">' . $variables['page_no'] . '.&nbsp</span>';
+  $text.= '<span class="mn_title">' . $variables['text'] . '</span>';
+  $link = l($text, $variables['path'], $variables['options']);
   return $link;
 }
-
 
 /**
  * Helper to extract Smart Paging data from multi-page content.
