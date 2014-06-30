@@ -99,14 +99,14 @@ function multipage_navigation_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_theme().
+ * Theme for link.
  */
 function theme_multipage_navigation_link($variables) {
   $variables['options']['html'] = TRUE;
-  $text = '<span class="mn_page">' . $variables['page_no'] . '.</span> ';
-  $text.= '<span class="mn_title">' . $variables['text'] . '</span>';
-  $link = l($text, $variables['path'], $variables['options']);
-  return $link;
+  $page = '<span class="mn_page">' . $variables['page_no'] . '.</span> ';
+  $title = '<span class="mn_title">' . $variables['text'] . '</span>';
+  $output = $page . l($title, $variables['path'], $variables['options']);
+  return $output;
 }
 
 /**
