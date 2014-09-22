@@ -157,7 +157,8 @@ function multipage_navigation_get_pagination($node) {
     $navigation_title = $node->title;
     if (isset($metatags[$page])) {
       // Extract the Navigation title.
-      if ($json_values = json_decode($metatags[$page])) {
+      $json_values = json_decode($metatags[$page]);
+      if (!empty($json_values->navigation_title)) {
         $navigation_title = $json_values->navigation_title;
       }
     }
