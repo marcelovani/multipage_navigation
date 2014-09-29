@@ -197,7 +197,7 @@ function multipage_navigation_get_pagination($node) {
       $pagination->current_page_number = $page_number;
       $pagination->default_title = $link['text'];
     }
-    $links[] = theme_multipage_navigation_link($link);
+    $links[] = theme('multipage_navigation_link', $link);
     $page_number++;
   }
   $pagination->links = $links;
