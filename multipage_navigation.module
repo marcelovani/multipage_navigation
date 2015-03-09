@@ -361,7 +361,7 @@ function multipage_navigation_preprocess_multipage_navigation_pager(&$variables)
  * Theme for pagination.
  */
 function theme_multipage_navigation_pager($variables) {
-  $output = '<div class="' . $variables['classes'] . '"' . $variables['attributes'] . '">
+  $output = '<div class="' . $variables['classes'] . '"' . $variables['attributes'] . '>
     <h4' . $variables['title_attributes'] . '>';
 
   if (!empty($variables['previous'])) {
