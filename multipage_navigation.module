@@ -95,6 +95,11 @@ function multipage_navigation_theme($existing, $type, $theme, $path) {
         'options' => NULL,
       ),
     ),
+    'multipage_navigation_pager' => array(
+      'variables' => array(
+        'pagination' => NULL,
+      ),
+    ),
   );
 }
 
@@ -229,10 +234,14 @@ function _multipage_navigation_get_current_page($element = 0) {
  * Implements hook_field_extra_fields().
  */
 function multipage_navigation_field_extra_fields() {
-  $total = 2;
   $extra = array();
-  for ($i = 1; $i < $total + 1; $i++) {
-    foreach (variable_get('multipage_navigation_content_types', array()) as $type) {
+
+  // Create fields for each of the content type that have been configured
+  // to have multipage navigation.
+  foreach (variable_get('multipage_navigation_content_types', array()) as $type) {
+    // A a couple of multipage navigation fields
+    $total = 2;
+    for ($i = 1; $i < $total + 1; $i++) {
       $extra['node'][$type]['display']['multipage_navigation_' . $i] = array(
         'label' => t('Multipage Navigation ' . $i),
         'description' => t('Displays the Multipage Navigation.'),
@@ -240,10 +249,18 @@ function multipage_navigation_field_extra_fields() {
         'visible' => TRUE,
       );
     }
+
+    // A pager with the previous & next titles
+    $extra['node'][$type]['display']['multipage_navigation_pager'] = array(
+      'label' => t('Multipage Navigation Pager'),
+      'description' => t('Displays the Multipage Navigation Pager.'),
+      'weight' => 50,
+      'visible' => FALSE,
+    );
   }
+
   return $extra;
 }
-
 
 /**
  * Implements hook_node_view().
@@ -267,14 +284,21 @@ function multipage_navigation_node_view($node, $view_mode, $langcode) {
     if (empty($displays[$view_mode]['visible'])) {
       continue;
     }
-    if ($field_name == 'multipage_navigation_1' || $field_name == 'multipage_navigation_2') {
-      $pagination = multipage_navigation_get_pagination($node);
-      if (count($pagination->links) > 1) {
-        $node->content[$field_name] = array(
-          '#theme' => 'multipage_navigation',
-          '#pagination' => $pagination,
-        );
-      }
+
+    // Theme the multipage_navigation extra fields.
+    switch ($field_name) {
+      case 'multipage_navigation_1':
+      case 'multipage_navigation_2':
+      case 'multipage_navigation_pager':
+        $pagination = multipage_navigation_get_pagination($node);
+        if (count($pagination->links) > 1) {
+          $theme = ($field_name == 'multipage_navigation_pager') ? 'multipage_navigation_pager' : 'multipage_navigation';
+          $node->content[$field_name] = array(
+            '#theme' => $theme,
+            '#pagination' => $pagination,
+          );
+        }
+        break;
     }
   }
 }
@@ -308,4 +332,47 @@ function multipage_navigation_preprocess_multipage_navigation(&$variables) {
       '@total' => count($pagination->links),
     )
   );
+}
+
+/**
+ * Implements hook_preprocess_multipage_navigation_pager().
+ */
+function multipage_navigation_preprocess_multipage_navigation_pager(&$variables) {
+  $pagination = $variables['pagination'];
+  $variables['links'] = $pagination->links;
+  $variables['attributes'] = '';
+  $variables['title_attributes'] = '';
+  $variables['classes'] = 'multipage-navigation-pager';
+  // Previous & next pagination.
+  $total_pages = count($pagination->links);
+  // multipage navigation is not 0 based, starts at 1.
+  $i = $pagination->current_page_number - 1;
+  if ($i > 0) {
+    // Previous page.
+    $variables['previous'] = $pagination->links[$i - 1];
+  }
+  if ($total_pages > 1 && $i < $total_pages - 1) {
+    // Next page.
+    $variables['next'] = $pagination->links[$i + 1];
+  }
+}
+
+/**
+ * Theme for pagination.
+ */
+function theme_multipage_navigation_pager($variables) {
+  $output = '<div class="' . $variables['classes'] . '"' . $variables['attributes'] . '">
+    <h4' . $variables['title_attributes'] . '>';
+
+  if (!empty($variables['previous'])) {
+    $output .= '<span class="mn_previous">' . $variables['previous'] . '</span>';
+  }
+
+  if (!empty($variables['next'])) {
+    $output .= '<span class="mn_next">' . $variables['next'] . '</span>';
+  }
+
+  $output .= '</h4></div>';
+
+  return $output;
 }
