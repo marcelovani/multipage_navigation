@@ -79,7 +79,7 @@ function multipage_navigation_block_view($delta = '') {
 function multipage_navigation_theme($existing, $type, $theme, $path) {
   return array(
     'multipage_navigation' => array(
-      'template' => 'templates/block--multipage-navigation',
+      'template' => 'templates/multipage-navigation',
       'variables' => array(
         'title' => NULL,
         'links' => NULL,
@@ -320,9 +320,9 @@ function multipage_navigation_uninstall() {
 }
 
 /**
- * Implements hook_preprocess_multipage_navigation().
+ * Implements hook_preprocess_HOOK().
  */
-function multipage_navigation_preprocess_multipage_navigation(&$variables) {
+function template_preprocess_multipage_navigation(&$variables) {
   $pagination = $variables['pagination'];
   $variables['links'] = $pagination->links;
   $variables['title'] = $pagination->default_title;
@@ -335,9 +335,9 @@ function multipage_navigation_preprocess_multipage_navigation(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_multipage_navigation_pager().
+ * Implements hook_preprocess_HOOK().
  */
-function multipage_navigation_preprocess_multipage_navigation_pager(&$variables) {
+function template_preprocess_multipage_navigation_pager(&$variables) {
   $pagination = $variables['pagination'];
   $variables['links'] = $pagination->links;
   $variables['attributes'] = '';
