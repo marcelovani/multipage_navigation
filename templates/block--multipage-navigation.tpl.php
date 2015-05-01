@@ -51,10 +51,12 @@
     <span class="arrow"></span>
     <nav class="mn_dropdown">
       <ul>
+        <?php $first_link_attr = ' data-page="' . $page_of_total . '"'; ?>
         <?php foreach($links as $page => $link): ?>
-          <li class="link">
+          <li class="link"<?php print $first_link_attr; ?>>
             <?php print $link; ?>
           </li>
+          <?php $first_link_attr = ''; ?>
         <?php endforeach ?>
       </ul>
     </nav>
