@@ -25,7 +25,10 @@
 ?>
 <section class="pagination mn_background">
   <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
-    <h2<?php print $title_attributes; ?>><strong><?php print $page_of_total; ?></strong><?php print $title; ?></h2>
+    <h2<?php print $title_attributes; ?>>
+      <strong><?php print $page_of_total; ?></strong>
+      <span><?php print $title; ?></span>
+    </h2>
     <span class="arrow"></span>
     <nav class="mn_dropdown">
       <ul>
