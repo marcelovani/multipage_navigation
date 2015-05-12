@@ -37,6 +37,7 @@
         // if the previous nav was open, close it
         if (isOpen === 1) {
           close(evt);
+          return;
         }
 
         var element = $(this);
