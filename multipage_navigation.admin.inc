@@ -17,6 +17,13 @@ function multipage_navigation_admin_settings() {
     '#default_value' => variable_get('multipage_navigation_pagination_text', 'Page @current of @total')
   );
 
+  $form['multipage_navigation_exclude_pages'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Exclude nodes without Pagination Block Title'),
+    '#description'   => t('To exclude pages from the pagination leave the Pagination Block Title blank. If no pages have a Pagination Block Title there will be no Pagination Block.'),
+    '#default_value' => variable_get('multipage_navigation_exclude_pages', FALSE),
+  );
+
   $node_types = node_type_get_names();
   $form['multipage_navigation_content_types'] = array(
     '#type' => 'checkboxes',

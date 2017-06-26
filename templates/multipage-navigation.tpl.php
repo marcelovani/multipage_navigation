@@ -26,7 +26,9 @@
 <section class="pagination mn_background">
   <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <h2<?php print $title_attributes; ?>>
-      <strong><?php print $page_of_total; ?></strong>
+      <?php if ($exclude == 0): ?>
+        <strong><?php print $page_of_total; ?></strong>
+      <?php endif; ?>
       <span><?php print $title; ?></span>
     </h2>
     <span class="arrow"></span>

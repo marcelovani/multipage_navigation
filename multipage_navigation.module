@@ -108,9 +108,13 @@ function multipage_navigation_theme($existing, $type, $theme, $path) {
  */
 function theme_multipage_navigation_link($variables) {
   $variables['options']['html'] = TRUE;
-  $page = '<span class="mn_page">' . $variables['page_no'] . '.</span> ';
+  $exclude = variable_get('multipage_navigation_exclude_pages');
   $title = '<span class="mn_title">' . $variables['text'] . '</span>';
-  $output = $page . l($title, $variables['path'], $variables['options']);
+  $output = l($title, $variables['path'], $variables['options']);
+  if ($exclude == 0) {
+    $page = '<span class="mn_page">' . $variables['page_no'] . '.</span> ';
+    $output = $page . l($title, $variables['path'], $variables['options']);
+  }
   return $output;
 }
 
@@ -142,6 +146,8 @@ function multipage_navigation_get_pagination($node) {
     $fragment_urls = array_merge(array(''), $matched_tags[1]);
   }
 
+  $exclude = variable_get('multipage_navigation_exclude_pages');
+
   // Find all smartpagingmeta tags.
   $metatags = array();
   preg_match_all('<!--smartpagingmeta ({.*?})-->', $content, $matched_tags); // @TODO improve regex.
@@ -163,6 +169,8 @@ function multipage_navigation_get_pagination($node) {
     if (isset($metatags[$page])) {
       // Extract the Navigation title.
       $json_values = json_decode($metatags[$page]);
+      // Check for the Navigation Block Title and exclude as required
+      $exclude_link = (empty($json_values->navigation_title)) ? TRUE : FALSE;
       if (!empty($json_values->navigation_title)) {
         $navigation_title = $json_values->navigation_title;
       }
@@ -183,7 +191,8 @@ function multipage_navigation_get_pagination($node) {
       'path' => 'node/' . $node->nid,
       'text' => $navigation_title,
       'options' => $options,
-      'active' => $active
+      'active' => $active,
+      'exclude' => $exclude_link
     );
   }
 
@@ -201,6 +210,10 @@ function multipage_navigation_get_pagination($node) {
       $link['options']['attributes']['class'][] = 'active-page';
       $pagination->current_page_number = $page_number;
       $pagination->default_title = $link['text'];
+    }
+    if ($exclude == 1 && $link['exclude'] == TRUE && $page_number != 1) {
+      // Skip the link
+      continue;
     }
     $links[] = theme('multipage_navigation_link', $link);
     $page_number++;
@@ -317,6 +330,7 @@ function multipage_navigation_page_alter(&$page) {
 function multipage_navigation_uninstall() {
   variable_del('multipage_navigation_pagination_text');
   variable_del('multipage_navigation_content_types');
+  variable_del('multipage_navigation_exclude_page');
 }
 
 /**
@@ -326,6 +340,7 @@ function template_preprocess_multipage_navigation(&$variables) {
   $pagination = $variables['pagination'];
   $variables['links'] = $pagination->links;
   $variables['title'] = $pagination->default_title;
+  $variables['exclude'] = variable_get('multipage_navigation_exclude_pages');
   $variables['page_of_total'] = t(variable_get('multipage_navigation_pagination_text', 'Page @current of @total'),
     array(
       '@current' => $pagination->current_page_number,
