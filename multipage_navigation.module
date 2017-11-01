@@ -307,6 +307,10 @@ function multipage_navigation_node_view($node, $view_mode, $langcode) {
  * Implements hook_page_alter()
  */
 function multipage_navigation_page_alter(&$page) {
+  if (path_is_admin(current_path())) {
+    return;
+  }
+
   drupal_add_css(drupal_get_path('module', 'multipage_navigation') . '/multipage_navigation.css');
   drupal_add_js(drupal_get_path('module', 'multipage_navigation') . '/multipage_navigation.js');
 }
